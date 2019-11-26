@@ -1,11 +1,24 @@
-class App {
+class Handbags {
     constructor() {
         this.handbags = []
-        this.adapter = new Adapter();
+        this.adapter = new HandbagsAdapter();
+        this.attachEventListeners();
+        this.fetchAndLoadHandbags();
         this.handleEditClick = this.handleEditClick.bind(this);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.createHandbags = this.createHandbags.bind(this);
         this.addHandbags = this.addHandbags.bind(this);
+    }
+
+    fetchAndLoadHandbags() {
+      this.adapter
+      .getHandbags()
+      .then(handbags => {
+       handbags.forEach(handbag => this.handbags.push(handbag))
+      })
+      .then(() => {
+        this.render()
+      })
     }
 
    attachEventListeners() {
@@ -45,7 +58,14 @@ class App {
         document.querySelector('#update').innerHTML = Handbag.renderUpdateForm();
       }
 
+      render(){
+        const handbagsContainer = document.querySelector('#handbags-list')
+        document.querySelector('#handbags-list').innerHTML = 'my notes here';
+        handbagsContainer.innerHTML = this.handbags.map(handbag => `<li><h3>${handbag.name}</h3> <h4>${handbag.collector}</h4> <h5>${handbag.designer}</h5> ${handbag.body}</li>`).join('')
+      }
+    }
 
-}
     
-  
+
+
+    
